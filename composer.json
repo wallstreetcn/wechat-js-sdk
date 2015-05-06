@@ -1,0 +1,13 @@
+{
+    "name": "wallstreetcn/wechat-js-sdk",
+    "type": "library",
+    "description": "Wechat JSSDK",
+    "authors": [
+        {
+            "name": "Wechat Team"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"Wechat\\JSSDK\\": "src/Wechat"}
+    }
+}
