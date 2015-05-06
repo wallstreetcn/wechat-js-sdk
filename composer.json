@@ -8,6 +8,6 @@
         }
     ],
     "autoload": {
-        "psr-4": {"Wechat\\JSSDK\\": "src/Wechat"}
+        "psr-4": {"Wechat\\JSSDK\\": "src/"}
     }
 }
