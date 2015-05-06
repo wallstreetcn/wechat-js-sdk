@@ -1,6 +1,6 @@
 <?php
 
-namespace Wechat\JSSDK;
+namespace WechatJSSDK;
 
 class JSSDK {
     private $appId;
