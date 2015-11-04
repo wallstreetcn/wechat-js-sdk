@@ -6,16 +6,18 @@ class JSSDK {
     private $appId;
     private $appSecret;
     private $memcache;
-    private $ticketKey = "jsapi_ticket";
-    private $tokenKey = "access_token";
+    private $ticketKey;
+    private $tokenKey;
     private $defaultTicket = array("jsapi_ticket" => "", "expire_time" => 0);
     private $defaultToken = array("access_token" => "", "expire_time" => 0);
 
-    public function __construct($appId, $appSecret) {
+    public function __construct($appId, $appSecret, $memcacheHost = 'localhost', $memcachePort = 11211) {
         $this->appId = $appId;
         $this->appSecret = $appSecret;
         $this->memcache = new \Memcache();
-        $this->memcache->connect('localhost', 11211);
+        $this->memcache->connect($memcacheHost, $memcachePort);
+        $this->ticketKey = "app_id_".$appId."_jsapi_ticket";
+        $this->tokenKey = "app_id_".$appId."_access_token";
         if (! $this->memcache->get($this->ticketKey)) {
             $this->memcache->set($this->ticketKey, json_encode($this->defaultTicket), false, 7200);
         }
