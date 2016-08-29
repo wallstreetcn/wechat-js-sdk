@@ -33,6 +33,7 @@ class JSSDK {
 
         // 注意 URL 一定要动态获取，不能 hardcode.
         // Fix 1: 由于负载均衡之后的页面不能拿到原始URL，所以要支持显式设置
+        $url = '';
         if (empty($this->url)) {
             $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
             $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
