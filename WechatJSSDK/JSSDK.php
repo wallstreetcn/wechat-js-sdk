@@ -4,6 +4,7 @@ namespace WechatJSSDK;
 
 class JSSDK {
     private $appId;
+    private $url;
     private $appSecret;
     private $memcache;
     private $ticketKey;
@@ -11,8 +12,9 @@ class JSSDK {
     private $defaultTicket = array("jsapi_ticket" => "", "expire_time" => 0);
     private $defaultToken = array("access_token" => "", "expire_time" => 0);
 
-    public function __construct($appId, $appSecret, $memcacheHost = 'localhost', $memcachePort = 11211) {
+    public function __construct($appId, $appSecret, $memcacheHost = 'localhost', $memcachePort = 11211, $url = '') {
         $this->appId = $appId;
+        $this->url = $url;
         $this->appSecret = $appSecret;
         $this->memcache = new \Memcache();
         $this->memcache->connect($memcacheHost, $memcachePort);
@@ -30,8 +32,13 @@ class JSSDK {
         $jsapiTicket = $this->getJsApiTicket();
 
         // 注意 URL 一定要动态获取，不能 hardcode.
-        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-        $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        // Fix 1: 由于负载均衡之后的页面不能拿到原始URL，所以要支持显式设置
+        if (empty($this->url)) {
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+            $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        } else {
+            $url = $this->url;
+        }
 
         $timestamp = time();
         $nonceStr = $this->createNonceStr();
